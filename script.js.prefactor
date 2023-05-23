@@ -1,0 +1,302 @@
+var addButton = document.getElementById("borderDemo");
+var originalAddButtonDisplay = addButton.style.display;
+var removeMode = false;
+var completedItems = JSON.parse(localStorage.getItem("completedItems")) || [];
+
+
+function showTextInput() {
+  var listItem = document.createElement("li");
+  var input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = "Enter text...";
+
+  var confirmButton = document.createElement("button");
+  confirmButton.textContent = "Confirm";
+  confirmButton.classList.add("confirm");
+  confirmButton.addEventListener("click", function () {
+    addItem(listItem, input);
+  });
+
+  input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      addItem(listItem, input);
+    }
+  });
+
+  var textElement = document.createElement("span"); // New element for holding the text
+  listItem.appendChild(textElement); // Add textElement to the list item
+  listItem.appendChild(input);
+  listItem.appendChild(confirmButton);
+  document.getElementById("myList").appendChild(listItem);
+  document.getElementById("emptyMessage").style.display = "none";
+  input.focus();
+
+  updateEmptyMessage();
+}
+
+  function addItem(listItem, input) {
+    if (input.value.trim() !== "") {
+      var textElement = listItem.querySelector("span");
+      textElement.textContent = input.value;
+      listItem.classList.add("item");
+      textElement.addEventListener("click", function () {
+        this.parentNode.classList.toggle("completed");
+        updateCompletedItems();
+      });
+      removeTextInput(listItem);
+  
+      // Check if the item is completed
+      if (listItem.classList.contains("completed")) {
+        // Add the completed item to the completed items array
+        completedItems.push(input.value);
+        // Save the updated completed items array to localStorage
+        localStorage.setItem("completedItems", JSON.stringify(completedItems));
+      }
+  
+      // Save the item to localStorage
+      saveItem(input.value);
+  
+      // Update the empty message after adding the new item
+      updateEmptyMessage();
+    }
+  }
+  
+
+
+function saveItem(value) {
+  // Get the current list of items from localStorage
+  var items = JSON.parse(localStorage.getItem("items")) || [];
+
+  // Add the new item to the array
+  items.push(value);
+
+  // Save the updated array back to localStorage
+  localStorage.setItem("items", JSON.stringify(items));
+}
+
+function loadItems() {
+    // Get the current list of items from localStorage
+    var items = JSON.parse(localStorage.getItem("items")) || [];
+  
+    // Add each item to the list
+    items.forEach(function (item) {
+      var listItem = document.createElement("li");
+      var textElement = document.createElement("span");
+      textElement.textContent = item;
+      listItem.appendChild(textElement);
+      document.getElementById("myList").appendChild(listItem);
+      updateEmptyMessage();
+      updateArchiveEmptyMessage();
+    });
+  
+    // Show the list after items are loaded
+    document.getElementById("myList").classList.remove("hidden");
+  }
+  
+  function loadCompletedItems() {
+    var items = JSON.parse(localStorage.getItem("completedItems")) || [];
+  
+    items.forEach(function (item) {
+      var listItem = document.createElement("li");
+      var textElement = document.createElement("span");
+      textElement.textContent = item;
+      listItem.appendChild(textElement);
+      if (document.getElementById("archiveList")) {
+        document.getElementById("archiveList").appendChild(listItem);
+      }
+    });
+  
+    updateEmptyMessage();
+    updateArchiveEmptyMessage();
+  }
+  
+  // Call the function to load completed items on page load
+  loadCompletedItems();
+  
+function removeTextInput(listItem) {
+  var input = listItem.querySelector("input");
+  listItem.removeChild(input);
+
+  var confirmButton = listItem.querySelector("button");
+  listItem.removeChild(confirmButton);
+}
+
+function updateEmptyMessage() {
+    var list = document.getElementById("myList");
+    var emptyMessage = document.getElementById("emptyMessage");
+    var removeButton = document.getElementById("removeButton");
+  
+    if (list.children.length === 0) {
+      emptyMessage.style.display = "block";
+      if (!removeMode) {
+        removeButton.style.display = "none"; // Hide the remove button only if removeMode is not enabled
+      }
+    } else {
+      emptyMessage.style.display = "none";
+      if (!removeMode) {
+        removeButton.style.display = "inline-block"; // Show the remove button only if removeMode is not enabled
+      }
+    }
+  }
+
+function enableRemoveMode() {
+  var listItems = document.querySelectorAll("#myList li");
+  for (var i = 0; i < listItems.length; i++) {
+    listItems[i].addEventListener("click", removeItem);
+    listItems[i].classList.add("remove-mode");
+    addButton.style.display = "none";
+  }
+  
+  var removeButton = document.getElementById("removeButton");
+  var doneButton = document.getElementById("doneButton");
+  removeButton.style.display = "none";
+  doneButton.style.display = "inline-block";
+  originalAddButtonDisplay = addButton.style.display;
+  addButton.style.display = "none";
+  
+  removeMode = true;
+}
+
+function disableRemoveMode() {
+    var listItems = document.querySelectorAll("#myList li");
+    for (var i = 0; i < listItems.length; i++) {
+      listItems[i].removeEventListener("click", removeItem);
+      listItems[i].classList.remove("remove-mode");
+    }
+  
+    var removeButton = document.getElementById("removeButton");
+    var doneButton = document.getElementById("doneButton");
+    removeButton.style.display = "inline-block";
+    doneButton.style.display = "none"; // Hide the done button
+    addButton.style.display = originalAddButtonDisplay;
+  
+    addButton.style.display = "inline-block"; // Show the "Add item" button
+  
+    removeMode = false;
+
+    updateEmptyMessage();
+  }
+  
+
+  function removeItem(event) {
+    if (removeMode) {
+      event.currentTarget.remove();
+      if (!removeMode) {
+        updateEmptyMessage();
+      }
+      removeItemFromStorage(event.currentTarget.textContent);
+  
+      // Remove the item from the completed items array if it exists
+      var completedIndex = completedItems.indexOf(event.currentTarget.textContent);
+      if (completedIndex !== -1) {
+        completedItems.splice(completedIndex, 1);
+        // Save the updated completed items array to localStorage
+        localStorage.setItem("completedItems", JSON.stringify(completedItems));
+      }
+    }
+  }
+  
+  function removeItemFromStorage(value) {
+    // Get the current list of items from localStorage
+    var items = JSON.parse(localStorage.getItem("items")) || [];
+  
+    // Find the index of the item to remove
+    var index = items.indexOf(value);
+  
+    // Remove the item from the array
+    if (index !== -1) {
+      items.splice(index, 1);
+    }
+  
+    // Save the updated array back to localStorage
+    localStorage.setItem("items", JSON.stringify(items));
+  }
+
+  function pushToArchive() {
+    var completedItems = document.querySelectorAll("#myList li.completed");
+  
+    completedItems.forEach(function (item) {
+      item.parentNode.removeChild(item);
+      if (document.getElementById("archiveList")) {
+        document.getElementById("archiveList").appendChild(item);
+      }
+  
+      var items = JSON.parse(localStorage.getItem("items")) || [];
+      var index = items.indexOf(item.textContent);
+      if (index !== -1) {
+        items.splice(index, 1);
+      }
+      localStorage.setItem("items", JSON.stringify(items));
+  
+      var completedItems = JSON.parse(localStorage.getItem("completedItems")) || [];
+      completedItems.push(item.textContent);
+      localStorage.setItem("completedItems", JSON.stringify(completedItems));
+    });
+  
+    updateEmptyMessage();
+    updateArchiveEmptyMessage();
+  }
+ 
+  function clearArchive() {
+    if (document.getElementById("archiveList")) {
+      document.getElementById("archiveList").innerHTML = "";
+    }
+  
+    localStorage.removeItem("completedItems");
+  
+    updateArchiveEmptyMessage();
+  }
+
+  
+  function removeItemFromArchive(value) {
+    // Get the current list of completed items from localStorage
+    var completedItems = JSON.parse(localStorage.getItem("completedItems")) || [];
+    
+    // Find the index of the item to remove
+    var index = completedItems.indexOf(value);
+    
+    // Remove the item from the array
+    if (index !== -1) {
+      completedItems.splice(index, 1);
+    }
+    
+    // Save the updated array back to localStorage
+    localStorage.setItem("completedItems", JSON.stringify(completedItems));
+  }
+
+  function updateArchiveEmptyMessage() {
+    if (document.getElementById("archiveList")) {
+      var archiveList = document.getElementById("archiveList");
+      var archiveEmptyMessage = document.getElementById("archiveEmptyMessage");
+  
+      if (archiveList.children.length === 0) {
+        archiveEmptyMessage.style.display = "block";
+      } else {
+        archiveEmptyMessage.style.display = "none";
+      }
+    }
+  }
+
+document.getElementById("borderDemo").addEventListener("click", showTextInput);
+document.getElementById("removeButton").addEventListener("click", enableRemoveMode);
+document.getElementById("doneButton").addEventListener("click", disableRemoveMode);
+document.getElementById("pushToArchive").addEventListener("click", pushToArchive);
+document.getElementById("clearArchiveButton").addEventListener("click", clearArchive);
+window.addEventListener("DOMContentLoaded", loadItems);
+
+document.getElementById("clearArchiveButton").addEventListener("mouseover", function() {
+  var archiveContainer = document.getElementById("archiveContainer");
+  archiveContainer.classList.add("highlight-archive");
+
+  var archiveList = document.getElementById("archiveList");
+  archiveList.classList.add("highlight-text");
+});
+
+document.getElementById("clearArchiveButton").addEventListener("mouseout", function() {
+  var archiveContainer = document.getElementById("archiveContainer");
+  archiveContainer.classList.remove("highlight-archive");
+
+  var archiveList = document.getElementById("archiveList");
+  archiveList.classList.remove("highlight-text");
+});
+

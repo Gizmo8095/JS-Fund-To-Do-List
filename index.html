@@ -8,10 +8,23 @@
         <title>To Do List</title>
     </head>
     <body>
-        <h1>To Do List</h1>
-        <ul>
 
-        </ul>
-        <script link="/.cherry.js"></script>
+        <h1>To Do List</h1>
+        <ul id="myList" class="hidden"></ul>
+        <p id="emptyMessage">The list is currently empty</p>
+        <button id="borderDemo">Add Item</button>
+        <button id="removeButton">Remove Items</button>
+        <button id="doneButton">Done</button>
+        <button id="pushToArchive">Archive</button>
+        
+    
+        <div id="archiveContainer">
+            <h2 class="archive-heading">Archive</h2>
+            <ul id="archiveList" class="archive-list"></ul>
+            <p id="archiveEmptyMessage">The archive is currently empty</p>
+            <button class="archive-button" id="clearArchiveButton">Clear Archive</button>
+          </div>
+          
+        <script src="script.js"></script>
     </body>
 </html>

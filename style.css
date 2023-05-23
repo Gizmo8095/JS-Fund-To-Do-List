@@ -1,0 +1,134 @@
+/* Set the text color */
+body {
+    color: #ebdbb2;
+}
+
+/* Set the background color */
+body {
+    background-color: #282828;
+}
+
+/* Style the primary button */
+.primary-button {
+    background-color: #98971a;
+    color: #fff;
+    /* Add any additional styling for the primary button */
+}
+
+/* Style the secondary button */
+.secondary-button {
+    background-color: #689d6a;
+    color: #fff;
+    /* Add any additional styling for the secondary button */
+}
+
+/* Style the accent color */
+.accent-color {
+    color: #458588;
+}
+
+/* Font for headers */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+/* Font for the rest of the text */
+body {
+    font-family: 'Ubuntu Mono', monospace;
+}
+
+/* Import the font for body text */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
+
+/* Import the font for header text */
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono:wght@400;700&display=swap');
+
+#borderDemo {
+    border: 5px solid #98971A;
+    background-color: #98971A;
+    border-radius: 0px 0px 15px 0px;
+    padding: 10px 20px;
+    color: #282828;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+li {
+    cursor: pointer;
+}
+
+.completed {
+    color: #a89984;
+    text-decoration: line-through;
+    cursor: pointer;
+}
+
+input[type="text"] {
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    outline: none;
+    font-family: inherit;
+}
+
+button {
+    border: 5px solid #98971A;
+    background-color: #98971A;
+    border-radius: 0px 0px 15px 0px;
+    padding: 10px 20px;
+    color: #282828;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button.confirm {
+    margin-left: 10px;
+}
+
+#removeButton,
+#doneButton {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Archive text class */
+.archive-heading {
+    color: #a89984;
+    font-size: 20px;
+    /* Add any additional styling for the archive heading */
+}
+
+/* Archive button class */
+.archive-button {
+    border-color: #689d6a;
+    background-color: #689d6a;
+    color: #282828;
+    /* Add any additional styling for the archive buttons */
+}
+
+/* Archive list text class */
+.archive-list li {
+    color: #a89984;
+    text-decoration: none;
+    /* Customize the color for the list text in the archive */
+}
+
+/* Archive empty message */
+#archiveEmptyMessage {
+    color: #a89984;
+    /* Change the text color */
+}
+
+#myList li.remove-mode:hover,
+#archiveList li.remove-mode:hover {
+    color: #cc241d; 
+}
+
+#archiveList.highlight-text li {
+    color: #cc241d;
+  }
+  
+  
