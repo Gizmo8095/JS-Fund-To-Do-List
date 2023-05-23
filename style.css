@@ -1,38 +1,23 @@
-/* Set the text color */
+
 body {
     color: #ebdbb2;
 }
 
-/* Set the background color */
+
 body {
     background-color: #282828;
 }
 
-/* Style the primary button */
 .primary-button {
     background-color: #98971a;
-    color: #fff;
-    /* Add any additional styling for the primary button */
+    color: #282828;
+
 }
 
-/* Style the secondary button */
-.secondary-button {
-    background-color: #689d6a;
-    color: #fff;
-    /* Add any additional styling for the secondary button */
-}
-
-/* Style the accent color */
-.accent-color {
-    color: #458588;
-}
-
-/* Font for headers */
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Ubuntu Mono', monospace;
 }
 
-/* Font for the rest of the text */
 body {
     font-family: 'Ubuntu Mono', monospace;
 }
@@ -94,32 +79,29 @@ button.confirm {
     display: none;
 }
 
-/* Archive text class */
 .archive-heading {
     color: #a89984;
     font-size: 20px;
-    /* Add any additional styling for the archive heading */
+    
 }
 
-/* Archive button class */
 .archive-button {
     border-color: #689d6a;
     background-color: #689d6a;
     color: #282828;
-    /* Add any additional styling for the archive buttons */
+   
 }
 
-/* Archive list text class */
 .archive-list li {
     color: #a89984;
     text-decoration: none;
-    /* Customize the color for the list text in the archive */
+    cursor: text;
+
 }
 
-/* Archive empty message */
 #archiveEmptyMessage {
     color: #a89984;
-    /* Change the text color */
+
 }
 
 #myList li.remove-mode:hover,
@@ -129,6 +111,10 @@ button.confirm {
 
 #archiveList.highlight-text li {
     color: #cc241d;
+  }
+  
+  input[type="text"] {
+    font-size: 16px; 
   }
   
   

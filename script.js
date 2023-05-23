@@ -7,6 +7,10 @@ function getCompletedItems() {
   return JSON.parse(localStorage.getItem("completedItems")) || [];
 }
 
+function getArchivedItemsFromStorage() {
+  return JSON.parse(localStorage.getItem("archivedItems")) || [];
+}
+
 function showTextInput() {
   var listItem = document.createElement("li");
   var input = createInput(listItem);
@@ -108,6 +112,20 @@ function saveItem(value) {
     });
   
     document.getElementById("myList").classList.remove("hidden");
+    loadArchivedItems();
+  }
+  
+  function loadArchivedItems() {
+    var archivedItems = getArchivedItemsFromStorage();
+  
+    archivedItems.forEach(function (item) {
+      var listItem = createListItem(item);
+      if (document.getElementById("archiveList")) {
+        document.getElementById("archiveList").appendChild(listItem);
+      }
+    });
+  
+    updateArchiveEmptyMessage();
   }
   
   function createListItem(item) {
@@ -116,8 +134,15 @@ function saveItem(value) {
     textElement.textContent = item;
     listItem.appendChild(textElement);
   
+    // Add event listener to mark item as completed
+    textElement.addEventListener("click", function () {
+      this.parentNode.classList.toggle("completed");
+      updateCompletedItems();
+    });
+  
     return listItem;
   }
+  
   
   function loadCompletedItems() {
     var items = getCompletedItems();
@@ -128,6 +153,11 @@ function saveItem(value) {
         document.getElementById("archiveList").appendChild(listItem);
       }
     });
+
+    function getArchivedItemsFromStorage() {
+      return JSON.parse(localStorage.getItem("archivedItems")) || [];
+    }
+    
   
     updateEmptyMessage();
     updateArchiveEmptyMessage();
@@ -228,6 +258,7 @@ function saveItem(value) {
   
     function pushToArchive() {
       var completedItems = document.querySelectorAll("#myList li.completed");
+      var archivedItems = getArchivedItemsFromStorage();
     
       completedItems.forEach(function (item) {
         item.parentNode.removeChild(item);
@@ -245,11 +276,16 @@ function saveItem(value) {
         var completedItems = JSON.parse(localStorage.getItem("completedItems")) || [];
         completedItems.push(item.textContent);
         localStorage.setItem("completedItems", JSON.stringify(completedItems));
+    
+        // Add the item to the archived items array and store it in localStorage
+        archivedItems.push(item.textContent);
+        localStorage.setItem("archivedItems", JSON.stringify(archivedItems));
       });
     
       updateEmptyMessage();
       updateArchiveEmptyMessage();
-    }
+    }  
+    
    
     function clearArchive() {
       if (document.getElementById("archiveList")) {
